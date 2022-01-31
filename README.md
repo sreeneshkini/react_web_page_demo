@@ -69,6 +69,7 @@ You can get the **Application Id** and **Admin API Key** from the Algolia Dashbo
 To integrate the InstantSearch, refactor the code as follows -
 
 a) Remove the following code from the **render** method and keep it aside. We will be reusing the same code in the ‘Hits’ component later  -
+
 b) Add the following InstantSearch and other components in the above space -
 
 ```
