@@ -1,211 +1,187 @@
-# Build an Algolia Powered Search for Starter Website Blog Using React.js and Contentstack
+# Build Multi Stack Communication Extension in Contentstack using React JS
 
 React.js is a JavaScript library for dynamic websites with rich user interfaces.
 
-Algolia is an AI-powered search and discovery platform allowing you to create cutting-edge customer experiences for your ecommerce website and mobile apps.
+This guide will help you build and use the multi stack communication extension using React.js. This extension helps to communicate between more than one stack, accessing their data and assets based on various options/parameters.
 
-This guide will help you create an Algolia powered search for blogs page on a starter marketing website built using the React.js framework. It uses Contentstack’s Node.js SDK to store and deliver the website content from Contentstack.
+Let&#39;s look at the steps to build the multi stack communication extension using React.js.
 
-Let’s look at the steps to create this Algolia powered search on a starter website using React.js, Algolia and Contentstack.
-# Prerequisites
-- Basic understanding of Algolia and React.js
-- [Contentstack](https://app.contentstack.com/#!/login) and [Algolia](https://www.algolia.com/users/sign_in) account
+## Prerequisites
+
+- Basic understanding of React.js
+- [Contentstack](https://app.contentstack.com/#!/login) account
 - Node.js version 12 or later
-- Contentstack CLI: **npm install -g @contentstack/cli**
 
-**Note**: For this tutorial, we have assumed that you are familiar with Contentstack, Algolia and React.js. If not, please refer to the [Contentstack docs](https://www.contentstack.com/docs), [Algolia docs](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/) and [React](https://reactjs.org/docs/getting-started.html) docs for more details.
-# Set Up Your App
+**Note** : For this tutorial, we have assumed that you are familiar with Contentstack and React.js. If not, please refer to the [Contentstack docs](https://www.contentstack.com/docs), and [React](https://reactjs.org/docs/getting-started.html) docs for more details.
+
+## Set Up Your App
+
 This involves three parts:
 
-1. Build a Starter Website Using React.js and Contentstack
-1. Setting up Algolia Search using Contentstack Webhooks and AWS Lambda
-1. Integrating Algolia Search for blogs page on a starter marketing website built using the React.js framework
+1. Setting up the Multi Stack Communication extension in Contentstack
+2. Setting up React.js code for the extension
+3. Using the extension in content type entry
 
-## 1. Build a Starter Website Using React.js and Contentstack
+## 1. Setting up the Multi Stack Communication extension in Contentstack
 
-To setup this, please refer our Contentstack doc about [Build a Starter Website Using React.js and Contentstack](https://www.contentstack.com/docs/developers/sample-apps/build-a-starter-website-using-react-js-and-contentstack)
+To set up the extension, [log in](https://www.contentstack.com/login/) to your Contentstack account and proceed with the following steps:
 
-## 2. Setting up Algolia Search using Contentstack Webhooks and AWS Lambda
+1. Go to your [stack](https://www.contentstack.com/docs/developers/set-up-stack/about-stack/), navigate to the **Settings** icon, and select **Extensions**.
 
-To setup this, please refer our Contentstack doc about [Add Algolia Search to Contentstack-powered Websites using AWS Lambda](https://www.contentstack.com/docs/developers/how-to-guides/add-algolia-search-to-contentstack-powered-websites-using-aws-lambda/)
+2. On the **Extensions** page, click on the **+ Add Extension** button and then on **Create new**. Alternatively, you can click on the **+ Add Extension** button at the bottom, as shown below:
 
-## 3. Integrating Algolia Search for blogs page on a starter marketing website built using the React.js framework
+3. In the **Select Extension Type** window, select **Custom Field**.
 
-Once we have built the Starter Website and indexed the corresponding blog entries from required stack into Algolia using Contentstack webhooks and AWS Lambda, we integrate Algolia Search using [React InstantSearch](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/). Follow below steps to integrate:
+4. On the **Create New Extension** page, enter values in the fields as given below:
 
-1. Installing Algolia and React InstantSearch node packages
-1. Importing AlgoliaSearch and React InstantSearch node packages
-1. Initializing the algoliaSearch 
-1. Integrating the InstantSearch
-1. Including the Algolia Satellite Theme CSS file
-1. Writing Custom CSS
-1. Execution and Testing
-## 1. Install Algolia and React InstantSearch node packages
-Using NPM, install following node packages -
 
-1) **npm install --save algoliasearch**
-1) **npm install --save react-instantsearch-dom**
-##
+  a) **Title** (required): Provide a suitable title, for example **Multi Stack Communication** , for your custom field. This title will be visible when you select the extension in the custom field in your content type.
 
-## 2. Importing AlgoliaSearch and React InstantSearch node packages
-Import algoliasearch and react-instantsearch-dom packages with required components inside **src/pages/blog.jsx** file -
+  b) **Field data type** (required): Select the data type in which the input data of the field should be saved in Contentstack. In this case, select **JSON**.
+
+  c) **Multiple** (optional): Leave this field unchecked.
+
+  d) **Hosting method** (required): Select **External Hosting** as the hosting method for this content type and enter the url which contains the React.js extension code. In this case, enter url as **http://localhost:3000/**
+
+  e) **Config parameter** : (optional): Specify the required config. This is based on the structure of your extension code. In this case, please refer the following config as shown below:
 
 ```
-import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, SearchBox, Hits, Pagination, Configure, connectStateResults } from 'react-instantsearch-dom;
-```
-
-You can read more about the above components [here](https://www.algolia.com/doc/guides/building-search-ui/what-is-instantsearch/react/)  
-## 3. Initialising the algoliaSearch
-Initialise the algoliasearch using ‘**Application Id**’ and ‘**Admin API Key**’ inside the **render** method. Fetch these credentials from environment variables -
-
-```
-const searchClient = algoliasearch(process.env.REACT_APP_ALOGLIA_INDEX, process.env.REACT_APP_ALOGLIA_ADMIN_API_KEY);
-```
-
-You can get the **Application Id** and **Admin API Key** from the Algolia Dashboard Settings as follows - 
-
-## 4. Integrating the InstantSearch
-To integrate the InstantSearch, refactor the code as follows -
-
-a) Remove the following code from the **render** method and keep it aside. We will be reusing the same code in the ‘Hits’ component later  -
-
-b) Add the following InstantSearch and other components in the above space -
-
-```
-<InstantSearch searchClient={searchClient} indexName="dev_react_algolia_starter_app">
-    <Configure hitsPerPage={4} />
-    <div className='blog-container'>
-        <div className='blog-column-left'>
-	        <div className="search-input">
-                <SearchBox />
-           </div>
-            <Results>
-                <Hits hitComponent={Hit} />
-                <div className="pagination-result">
-                    <Pagination showFirst={false} showLast={false} totalPages={2} />
-                </div>
-            </Results>
-        </div>
-        <div className='blog-column-right'>
-            {entry.page_components[1].widget && (
-                <h2>{entry.page_components[1].widget.title_h2} </h2>
-            )}
-           <ArchiveRelative blogs={archived} />
-        </div>
-    </div>
-</InstantSearch>
-```
-We are using the InstantSearch Component along with Configure, SearchBox, Results, Hits and Pagination components as follows -
-
-1) **InstantSearch** - This component takes ‘searchClient’ that we initialised earlier, along with the ‘indexName’ attribute which consumes the index name as **dev\_react\_algolia\_starter\_app**, which we created in Algolia Dashboard as follows -
-
-1) **Configure** - This component configures the results per page using attribute ‘hitsPerPage’
-1) **SearchBox** - This component creates a Search box which can be used for searching results
-1) **Hits** - Results component takes Hits component which uses ‘hitComponent’ attribute to pass data and return results
-1) **Pagination** - This component provides pagination functionality for the results fetched
-
-You can read more about above components [here](https://www.algolia.com/doc/api-reference/widgets/instantsearch/react/) - 
-
-c) Create ‘Hits’ component with the previous code that we had removed and kept aside for reuse, with following changes -
-
-```
-function Hit(props) {
-    return (
-        <div className='blog-list'>
-            {props.hit.featured_image && (
-                <Link to={props.hit.url}>
-                    <img
-                    alt='blog img'
-                    className='blog-list-img'
-                    src={props.hit.featured_image.url}
-                />
-                </Link>
-            )}
-            <div className='blog-content'>
-                {props.hit.title && (
-                    <Link to={props.hit.url}>
-                        <h3>{props.hit.title}</h3>
-                    </Link>
-                )}
-                <p>
-                 {moment(props.hit.date).format('ddd, MMM D YYYY')},{' '}
-                 <strong>{props.hit.author[0].title}</strong>
-                </p>
-                { props.hit.body && parse(props.hit.body.slice(0, 300)) }
-                {props.hit.url ? (
-                    <Link to={props.hit.url}>
-                        <span>{'Read more -->'}</span>
-                    </Link>
-                ) : (
-                    ''
-                )}
-            </div>
-        </div>
-    );
+{
+	"stackA": [
+	{
+		"api_key": "YOUR API KEY",
+		"management_token": "YOUR MANAGEMENT TOKEN",
+		"access_token": "YOUR ACCESS TOKEN",
+		"baseUrl": "api.contentstack.io",
+		"assetsType": [
+			"image/svg+xml",
+			"image/gif",
+			"image/png",
+			"application/json",
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			"video/webm",
+			"application/pdf",
+			"video/quicktime",
+			"application/zip"
+		]
+	}
+	],
+	"stackB": [
+	{
+		"api_key": "YOUR API KEY",
+		"management_token": "YOUR MANAGEMENT TOKEN",
+		"access_token": "YOUR ACCESS TOKEN",
+		"baseUrl": "api.contentstack.io",
+		"assetsType": [
+			"image/svg+xml",
+			"image/jpeg",
+			"image/png",
+			"application/json"
+		]
+	}
+	]
 }
 ```
 
-**Hits component** structures the data that we want to display on the Blogs page. The result is consumed via **props.hit**
+The config is an object which stores multiple Stack information which is used for fetching their content type data and assets. You can choose any name for each Stack object. In this case, it&#39;s **stackA** and **stackB**. Each Stack is an array which contains following key value pairs:
 
-d) Create ‘Results’ component as follows -
+1. **api\_key** (required): Specifies the api key of the stack. For more info, click [here](https://www.contentstack.com/docs/developers/set-up-stack/stack-faqs/#where-can-i-find-the-api-key-and-access-token-of-my-stack-).
 
-```
-const Results = connectStateResults(
-    ({ searchState, searchResults, children }) =>
-    searchResults && searchResults.nbHits !== 0 ? (
-        children
-    ) : (
-        <div>No results have been found for &apos;{searchState.query}&apos;.</div>
-    )
-);
-```
+2. **management\_token** (required): Specifies the management token of the stack. For more info, click [here](https://www.contentstack.com/docs/developers/create-tokens/generate-a-management-token/).
 
-**Results component** uses Algolia’s conditional display functionality which makes use of **connectStateResults** method to return results else ‘No results Found’ if Hits is empty.
+3. **access\_token** (required): Specifies the access token of the stack. For more info, click [here](https://www.contentstack.com/docs/developers/set-up-stack/stack-faqs/#where-can-i-find-the-api-key-and-access-token-of-my-stack-).
 
-You can read more about above functionality [here](https://www.algolia.com/doc/guides/building-search-ui/going-further/conditional-display/react/) - 
-## 5. Including the Algolia Satellite Theme CSS file
-Create a file **‘algolia\_search\_satellite\_theme.min.css’** inside the **src/styles** folder and include the Algolia Satellite Theme CSS from [here](https://cdn.jsdelivr.net/npm/instantsearch.css@7.4.5/themes/satellite-min.css). 
+4. **baseUrl** (required): Specifies the base url to be used for the Contentstack client. The urls can be as follows -
 
-Import ‘**algolia\_search\_satellite\_theme.min.css**’ file inside **src/App.js** file as follows -
+     - NA Region - https://api.contentstack.io
+     - EU Region - https://eu-api.contentstack.com/
 
-```
-import './styles/algolia_search_satellite_theme.min.css'
-```
 
-You can read more about loading styles [here](https://www.algolia.com/doc/guides/building-search-ui/installation/js/#load-the-styles)
-## 6. Writing Custom CSS
-Add following custom CSS inside **src/styles/style.css** -
+5. **assetsType** (required): Specifies the list of asset types.
+5. Once you have added these details, click on **Save**.
 
-```
-/* algolia instant search client start */
- 
-.ais-Hits-list li {
- list-style-type: none;
-}
- 
-.search-input {
- width: 100%;
- position: relative;
- bottom: 20px;
-}
- 
-.pagination-result {
- margin: 0px auto;
- position: relative;
- top: 30px;
-}
- 
-/* algolia instant search client end */
+## 2. Setting up React.js code for the extension
 
-```
+To set up the React code for the extension, proceed with the following steps:
 
-## 7. Execution and Testing
-We can now execute and test Algolia search on browser as follows -
+1. Download the code from our [Github](https://github.com/Ashish-SA-CS/React-Starter-Live-Preview/tree/feature/multi-stack) repository. If you don&#39;t have access to the repository then contact our [Support](mailto:support@contentstack.com) team to get the code for the extension.
 
-1) **npm start**
-1) **Visit ‘<http://localhost:3000/blog>’ to test**
+2. Open the code in any appropriate code editor application.
 
-Following shows how the Algolia Search looks like when we get the matching results -
+3. Open the command prompt and move inside the project root directory. Then, run the command **npm install** to install the required dependencies.
 
-Following shows how the Algolia Search looks like when we get no results -
+4. In the command terminal, execute the command:
+**npm start**
+
+5. In your web-browser enter the following address:
+[**http://localhost:3000/**](http://localhost:3000/)
+
+To understand the code structure, please visit [here](#_z2hf6efwjs3a).
+
+## 3. Using the extension in content type entry
+
+To integrate Multi Stack Communication extension with Contentstack, we have created a content type named **Multi-Communication Extension** that has the following structure (Please note that the following content type is created for demo purpose only. You can add this extension to any existing content types or create your own new one) :
+
+As you can see above, its content type consists of [Title field](https://www.contentstack.com/docs/developers/create-content-types/title) and [Custom field](https://www.contentstack.com/docs/developers/create-content-types/custom/) which is used to add the extension that we created.
+
+The entry of this Multi-Communication Extension is shown below:
+
+As seen above, the Multi-Stack field(which is our extension) contains the following fields:
+
+1. **Entries** - This section is used to create multiple entries that will fetch required data from multiple stacks and content types.
+
+2. **Assets** - This section is used to create multiple assets that will fetch required assets from multiple stacks.
+
+The **Entries** section has the following structure:
+
+As seen above, the Entries section contains the following fields in the order of their selection:
+
+1. **Select Stack** - This field shows a list of stacks that we configured before in the **Config Parameter** section in the extension. In this case, we selected **Stack B**.
+
+2. **Select ContentType** - Upon selection of Stack, this field shows the list of respective Content Types. In this case, we selected **Page**.
+
+3. **Select Environment** - Upon selection of ContentType, this field shows the list of respective Environments. In this case, we selected **development**.
+
+1. **Select Locale** - Upon selection of Environment, this field shows the list of respective Locales. In this case, we selected **en-us**.
+
+2. **Select Entry** - Upon selection of Locale, this field shows the list of respective Entries. In this case, we selected **Home**. We can select multiple entries.
+
+The **Assets** section has the following structure:
+
+As seen above, the Assets section contains the following fields in the order of their selection:
+
+1. **Select Stack** - This field shows a list of stacks that we configured before in the **Config Parameter** section in the extension. In this case, we selected **Stack B**.
+
+2. **Select Folder** - Upon selection of Folder, this field shows the list of respective asset folders available in the Stack. If there are no folders, this field will not be visible. In this case, we selected **Authors**. We can select multiple folders.
+
+3. **Select AssetType** - Upon selection of Folder, this field shows the list of respective Asset types. In this case, we selected **image/png**. We can select multiple asset types.
+
+4. **Select Assets** - Upon selection of AssetType, this field shows the list of respective assets. We can select multiple assets.
+
+Other features of this extension are as follows:
+
+1. We can create more than one entry and asset.
+
+2. For the fields that contain multiple selection, you can search for the data.
+
+3. Using the delete icon, any of the entries and assets can be deleted.
+
+Once you have added required entries and assets, click on **Save**. To check if the data entry is saved successfully, click on the **three dots icon** and select **Export**. This will download a JSON file which will contain the JSON object for the extension which has the following structure. We can achieve this JSON output using our Contentstack Management API as well. To know more you can click [here](https://www.contentstack.com/docs/developers/apis/content-management-api/#export-an-entry).
+
+**Entries structure** :
+
+**Assets structure** :
+
+This JSON object contains the data that we captured for entries/assets.
+
+## 4. Understanding the code structure for the extension
+
+- The entry point for the extension is the &#39;App.js&#39; file. It initializes the extension and passes the data to the required components for &#39;Entries&#39; and &#39;Assets&#39;. The extension makes use of Venus components and extension sdk.
+
+- &#39;Components&#39; folder contains separate components for &#39;Entries&#39; and &#39;Assets&#39;, namely, &#39;AddEntry&#39; and &#39;AddAssets&#39;, respectively.
+
+- &#39;AddEntry&#39; manages the data fields &#39;content\_type&#39;, &#39;entry&#39;, &#39;local&#39; and &#39;environment&#39;. The &#39;index.js&#39; file manages the state of these fields and accordingly handles fetching and adding of entries.
+
+- &#39;AddAssets&#39; manages the data fields &#39;assets&#39;, &#39;file\_types&#39; and &#39;folders&#39;. The &#39;index.js&#39; file manages the state of these fields and accordingly handles fetching and adding of assets.
+
+- The extension uses an SDK for fetching entries and Management API for fetching assets.
