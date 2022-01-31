@@ -34,7 +34,7 @@ Stack.setHost("api.contentstack.io");
 //set REACT_APP_CUSTOM_HOST in env
 ```
 
-1. Install and Initialize the Live Preview Utils SDK
+3. Install and Initialize the Live Preview Utils SDK
 
 ```
 npm install @contentstack/live-preview-utils
