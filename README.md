@@ -133,7 +133,7 @@ const Stack = contentstack.Stack({
 });
 ```
 
-contentstack/utils Package give as addEditableTags() method, import package like this,
+'contentstack/utils' Package give as addEditableTags() method, import package like this,
 
 ```
 //pages/index.jsx      
